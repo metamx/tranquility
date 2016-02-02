@@ -48,6 +48,7 @@ import org.joda.time.chrono.ISOChronology
 import org.joda.time.DateTime
 import org.joda.time.Interval
 import org.scala_tools.time.Implicits._
+import scala.collection.JavaConverters._
 import scala.util.Random
 
 class DruidBeamMaker[A: Timestamper](
@@ -94,9 +95,10 @@ class DruidBeamMaker[A: Timestamper](
       new FireDepartment(
         new DataSchema(
           dataSource,
-          parser,
+          DruidGuicer.objectMapper.convertValue(parser, classOf[java.util.Map[String, AnyRef]]),
           rollup.aggregators.toArray,
-          new UniformGranularitySpec(beamTuning.segmentGranularity, rollup.indexGranularity, null)
+          new UniformGranularitySpec(beamTuning.segmentGranularity, rollup.indexGranularity, null),
+          DruidGuicer.objectMapper
         ),
         new RealtimeIOConfig(
           new ClippedFirehoseFactory(
@@ -104,10 +106,14 @@ class DruidBeamMaker[A: Timestamper](
               new EventReceiverFirehoseFactory(
                 location.environment.firehoseServicePattern format firehoseId,
                 config.firehoseBufferSize,
+                null,
+                null,
+                null,
                 null
               ), shutoffTime
             ), interval
           ),
+          null,
           null
         ),
         new RealtimeTuningConfig(
@@ -133,7 +139,8 @@ class DruidBeamMaker[A: Timestamper](
           null,
           null
         )
-      )
+      ),
+      Map[String, AnyRef]().asJava
     )
   }
 

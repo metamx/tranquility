@@ -14,7 +14,7 @@ concurrentRestrictions in Global += Tags.limitAll(1)
 
 val jacksonOneVersion = "1.9.13"
 val jacksonTwoVersion = "2.6.1"
-val druidVersion = "0.8.1"
+val druidVersion = "0.8.3"
 val finagleVersion = "6.25.0"
 val twitterUtilVersion = "6.25.0"
 val samzaVersion = "0.8.0"
@@ -127,7 +127,7 @@ lazy val commonSettings = Seq(
 
   publishMavenStyle := true,
 
-  publishTo := Some("releases" at "https://oss.sonatype.org/service/local/staging/deploy/maven2/"),
+  publishTo := Some("pub-libs" at "https://metamx.artifactoryonline.com/metamx/pub-libs-releases-local"),
 
   pomIncludeRepository := { _ => false },
 
