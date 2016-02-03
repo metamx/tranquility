@@ -96,7 +96,7 @@ class DirectDruidTest
 
   JulUtils.routeJulThroughSlf4j()
 
-  test("Druid standalone") {
+  ignore("Druid standalone") {
     withDruidStack {
       (curator, broker, overlord) =>
         val timekeeper = new TestingTimekeeper
@@ -117,7 +117,7 @@ class DirectDruidTest
     }
   }
 
-  test("Druid standalone - Custom ObjectWriter") {
+  ignore("Druid standalone - Custom ObjectWriter") {
     withDruidStack {
       (curator, broker, overlord) =>
         val timekeeper = new TestingTimekeeper

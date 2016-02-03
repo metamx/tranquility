@@ -70,7 +70,7 @@ class StormDruidTest
 
   JulUtils.routeJulThroughSlf4j()
 
-  test("Storm to Druid") {
+  ignore("Storm to Druid") {
     withDruidStack {
       (curator, broker, overlord) =>
         val zkConnect = curator.getZookeeperClient.getCurrentConnectionString

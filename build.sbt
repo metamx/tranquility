@@ -63,7 +63,8 @@ val coreDependencies = Seq(
   "com.google.inject" % "guice" % "4.0-beta" force(),
   "com.google.inject.extensions" % "guice-servlet" % "4.0-beta" force(),
   "com.google.inject.extensions" % "guice-multibindings" % "4.0-beta" force(),
-  "javax.validation" % "validation-api" % "1.1.0.Final" force()
+  "javax.validation" % "validation-api" % "1.1.0.Final" force(),
+  "org.apache.logging.log4j" % "log4j-core" % "2.4" // add back core to avoid druid injection fail
 )
 
 val stormDependencies = Seq(
@@ -106,6 +107,7 @@ val coreTestDependencies = Seq(
   "ch.qos.logback" % "logback-classic" % "1.1.2" % "test",
   "org.apache.logging.log4j" % "log4j-to-slf4j" % "2.4" % "test",
   "org.apache.logging.log4j" % "log4j-api" % "2.4" % "test",
+  "org.apache.logging.log4j" % "log4j-core" % "2.4" % "test", // add back core to not have druid injection fail
   "org.slf4j" % "log4j-over-slf4j" % "1.7.12" % "test",
   "org.slf4j" % "jul-to-slf4j" % "1.7.12" % "test"
 )
