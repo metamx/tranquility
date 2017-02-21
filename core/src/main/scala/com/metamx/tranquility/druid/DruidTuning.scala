@@ -27,7 +27,7 @@ case class DruidTuning(
   maxRowsInMemory: Int = 75000,
   intermediatePersistPeriod: Period = 10.minutes,
   maxPendingPersists: Int = 0,
-  buildV9Directly: Boolean = false
+  buildV9Directly: Boolean = true
 )
 {
   def toMap: Dict = Dict(
@@ -47,16 +47,22 @@ object DruidTuning
     *
     * @param maxRowsInMemory           number of rows to aggregate before persisting
     * @param intermediatePersistPeriod period that determines the rate at which intermediate persists occur
+<<<<<<< HEAD
     * @param maxPendingPersists        number of persists that can be pending, but not started
+=======
+    * @param maxPendingPersists number of persists that can be pending, but not started
+    * @param buildV9Directly should Druid be asked to build v9 segments directly
+>>>>>>> de7958b... [BACKEND-616] Defaulting buildV9Directly to true
     */
   @deprecated("use 'apply' or 'builder'", "0.7.3")
   def create(
     maxRowsInMemory: Int,
     intermediatePersistPeriod: Period,
-    maxPendingPersists: Int
+    maxPendingPersists: Int,
+    buildV9Directly: Boolean
   ): DruidTuning =
   {
-    apply(maxRowsInMemory, intermediatePersistPeriod, maxPendingPersists)
+    apply(maxRowsInMemory, intermediatePersistPeriod, maxPendingPersists, buildV9Directly)
   }
 
   /**
@@ -107,7 +113,7 @@ object DruidTuning
       * Should Druid be asked to build v9 segments directly? Only supported in certain versions of Druid.
       * See your Druid version's documentation for details.
       *
-      * Default is false.
+      * Default is true.
       */
     def buildV9Directly(x: Boolean) = new Builder(config.copy(buildV9Directly = x))
 
