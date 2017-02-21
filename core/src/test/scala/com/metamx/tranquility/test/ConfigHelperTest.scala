@@ -50,7 +50,7 @@ class ConfigHelperTest extends FunSuite with ShouldMatchers
       builder.config._rollup.get.aggregators.map(_.getName) should be(Seq("count", "x"))
       builder.config._druidTuning.get.maxRowsInMemory should be(100000)
       builder.config._druidTuning.get.intermediatePersistPeriod should be(new Period("PT45S"))
-      builder.config._druidTuning.get.buildV9Directly should be(true)
+      builder.config._druidTuning.get.buildV9Directly should be(false)
       builder.config._tuning.get.windowPeriod should be(new Period("PT30S"))
     }
   }
@@ -73,7 +73,7 @@ class ConfigHelperTest extends FunSuite with ShouldMatchers
       builder.config._rollup.get.aggregators.map(_.getName) should be(Seq("count", "x"))
       builder.config._druidTuning.get.maxRowsInMemory should be(100000)
       builder.config._druidTuning.get.intermediatePersistPeriod should be(new Period("PT45S"))
-      builder.config._druidTuning.get.buildV9Directly should be(true)
+      builder.config._druidTuning.get.buildV9Directly should be(false)
       builder.config._tuning.get.windowPeriod should be(new Period("PT30S"))
     }
   }
@@ -96,7 +96,7 @@ class ConfigHelperTest extends FunSuite with ShouldMatchers
       builder.config._rollup.get.aggregators.map(_.getName) should be(Seq("count", "x"))
       builder.config._druidTuning.get.maxRowsInMemory should be(75000)
       builder.config._druidTuning.get.intermediatePersistPeriod should be(new Period("PT10M"))
-      builder.config._druidTuning.get.buildV9Directly should be(false)
+      builder.config._druidTuning.get.buildV9Directly should be(true)
       builder.config._tuning.get.windowPeriod should be(new Period("PT10M"))
     }
   }
