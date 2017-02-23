@@ -47,12 +47,8 @@ object DruidTuning
     *
     * @param maxRowsInMemory           number of rows to aggregate before persisting
     * @param intermediatePersistPeriod period that determines the rate at which intermediate persists occur
-<<<<<<< HEAD
     * @param maxPendingPersists        number of persists that can be pending, but not started
-=======
-    * @param maxPendingPersists number of persists that can be pending, but not started
-    * @param buildV9Directly should Druid be asked to build v9 segments directly
->>>>>>> de7958b... [BACKEND-616] Defaulting buildV9Directly to true
+    * @param buildV9Directly           should Druid be asked to build v9 segments directly
     */
   @deprecated("use 'apply' or 'builder'", "0.7.3")
   def create(
