@@ -30,7 +30,7 @@ dataSources:
         maxRowsInMemory: 100000
         intermediatePersistPeriod: PT45S
         windowPeriod: PT30S
-        buildV9Directly: true
+        buildV9Directly: false
 
     properties:
       task.partitions: 3
