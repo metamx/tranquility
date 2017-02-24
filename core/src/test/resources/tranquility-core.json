@@ -45,7 +45,7 @@
           "type" : "realtime",
           "intermediatePersistPeriod" : "PT45S",
           "maxRowsInMemory" : 100000,
-          "buildV9Directly" : true,
+          "buildV9Directly" : false,
           "windowPeriod" : "PT30S"
         }
       }

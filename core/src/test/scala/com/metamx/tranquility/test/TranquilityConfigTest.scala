@@ -55,7 +55,7 @@ class TranquilityConfigTest extends FunSuite with ShouldMatchers
       builder.config._druidTuningMap.get should be(Dict(
         "type" -> "realtime",
         "maxRowsInMemory" -> 100000,
-        "buildV9Directly" -> true,
+        "buildV9Directly" -> false,
         "intermediatePersistPeriod" -> "PT45S",
         "windowPeriod" -> "PT30S",
         "maxPendingPersists" -> 0
@@ -84,7 +84,7 @@ class TranquilityConfigTest extends FunSuite with ShouldMatchers
       builder.config._druidTuningMap.get should be(Dict(
         "type" -> "realtime",
         "maxRowsInMemory" -> 100000,
-        "buildV9Directly" -> true,
+        "buildV9Directly" -> false,
         "intermediatePersistPeriod" -> "PT45S",
         "windowPeriod" -> "PT30S",
         "maxPendingPersists" -> 0
@@ -142,7 +142,7 @@ class TranquilityConfigTest extends FunSuite with ShouldMatchers
       builder.config._druidTuningMap.get should be(Dict(
         "type" -> "realtime",
         "maxRowsInMemory" -> 75000,
-        "buildV9Directly" -> false,
+        "buildV9Directly" -> true,
         "intermediatePersistPeriod" -> "PT10M",
         "maxPendingPersists" -> 0
       ))
