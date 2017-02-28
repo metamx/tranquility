@@ -173,26 +173,19 @@ lazy val commonSettings = Seq(
 
   licenses := Seq("Apache License, Version 2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
 
-  homepage := Some(url("https://github.com/druid-io/tranquility")),
+  homepage := Some(url("https://github.com/metamx/tranquility")),
 
   publishMavenStyle := true,
 
-  publishTo := Some("releases" at "https://oss.sonatype.org/service/local/staging/deploy/maven2/"),
+  publishTo := Some("central-local" at "https://metamx.artifactoryonline.com/metamx/libs-releases-local"),
 
   pomIncludeRepository := { _ => false },
 
   pomExtra := (
     <scm>
-      <url>https://github.com/druid-io/tranquility.git</url>
-      <connection>scm:git:git@github.com:druid-io/tranquility.git</connection>
-    </scm>
-      <developers>
-        <developer>
-          <name>Gian Merlino</name>
-          <organization>Druid Project</organization>
-          <organizationUrl>http://druid.io/</organizationUrl>
-        </developer>
-      </developers>),
+      <url>https://github.com/metamx/tranquility.git</url>
+      <connection>scm:git:git@github.com:metamx/tranquility.git</connection>
+    </scm>),
 
   fork in Test := true
 ) ++ releaseSettings ++ net.virtualvoid.sbt.graph.Plugin.graphSettings ++ Seq(
