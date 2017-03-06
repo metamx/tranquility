@@ -185,7 +185,7 @@ lazy val commonSettings = Seq(
     <scm>
       <url>https://github.com/metamx/tranquility.git</url>
       <connection>scm:git:git@github.com:metamx/tranquility.git</connection>
-    </scm>
+    </scm>),
 
   fork in Test := true
 ) ++ releaseSettings ++ net.virtualvoid.sbt.graph.Plugin.graphSettings ++ Seq(
