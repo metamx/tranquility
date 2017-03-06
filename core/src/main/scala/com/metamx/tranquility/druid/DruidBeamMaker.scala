@@ -48,7 +48,8 @@ class DruidBeamMaker[A](
   indexService: IndexService,
   emitter: ServiceEmitter,
   objectWriter: ObjectWriter[A],
-  druidObjectMapper: ObjectMapper
+  druidObjectMapper: ObjectMapper,
+  taskContext: Map[String, Any] = Map()
 ) extends BeamMaker[A, DruidBeam[A]] with Logging
 {
   private[tranquility] def taskBytes(
@@ -56,7 +57,8 @@ class DruidBeamMaker[A](
     availabilityGroup: String,
     firehoseId: String,
     partition: Int,
-    replicant: Int
+    replicant: Int,
+    taskContext: Map[String, Any] = Map()
   ): Array[Byte] =
   {
     val dataSource = location.dataSource
@@ -142,7 +144,7 @@ class DruidBeamMaker[A](
         "ioConfig" -> ioConfigMap,
         "tuningConfig" -> druidTuningMapWithOverrides
       )
-    )
+    ) ++ Option(taskContext).map { case m if m.nonEmpty => Map("context" -> m)}.getOrElse(Dict())
     druidObjectMapper.writeValueAsBytes(normalizeJava(taskMap))
   }
 
@@ -159,7 +161,7 @@ class DruidBeamMaker[A](
     )
     val futureTasks = for (replicant <- 0 until beamTuning.replicants) yield {
       val firehoseId = "%s-%04d" format(availabilityGroup, replicant)
-      indexService.submit(taskBytes(interval, availabilityGroup, firehoseId, partition, replicant)) map {
+      indexService.submit(taskBytes(interval, availabilityGroup, firehoseId, partition, replicant, taskContext)) map {
         taskId =>
           TaskPointer(taskId, firehoseId)
       }

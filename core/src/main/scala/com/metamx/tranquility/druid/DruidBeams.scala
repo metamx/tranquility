@@ -589,6 +589,10 @@ object DruidBeams
       )
     }
 
+    def taskContext(taskContext: Map[String, Any]) = {
+      new Builder[InputType, EventType](config.copy(_taskContext = Some(taskContext)))
+    }
+
     /**
       * Build a Beam using this DruidBeams builder.
       *
@@ -612,7 +616,8 @@ object DruidBeams
         things.indexService,
         things.emitter,
         things.objectWriter,
-        things.druidObjectMapper
+        things.druidObjectMapper,
+        things.taskContext
       )
       val clusteredBeam = new ClusteredBeam(
         things.clusteredBeamZkBasePath,
@@ -714,7 +719,8 @@ object DruidBeams
     _beamMergeFn: Option[Seq[Beam[EventType]] => Beam[EventType]] = None,
     _alertMap: Option[Dict] = None,
     _objectWriter: Option[ObjectWriter[EventType]] = None,
-    _timestamper: Option[Timestamper[EventType]] = None
+    _timestamper: Option[Timestamper[EventType]] = None,
+    _taskContext: Option[Map[String, Any]] = None
   )
   {
     def buildAll() = new {
@@ -809,6 +815,7 @@ object DruidBeams
           new MergingPartitioningBeam[EventType](partitioner, beams.toIndexedSeq)
         }
       }
+      val taskContext             = _taskContext getOrElse Map.empty
     }
   }
 
