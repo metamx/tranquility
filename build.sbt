@@ -160,7 +160,7 @@ val kafkaTestDependencies = Seq(
 )
 
 lazy val commonSettings = Seq(
-  organization := "metamx",
+  organization := "io.druid",
 
   javaOptions := Seq("-Xms512m", "-Xmx512m", "-XX:MaxPermSize=256M"),
 
