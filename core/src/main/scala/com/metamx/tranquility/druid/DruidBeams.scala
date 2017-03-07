@@ -589,7 +589,7 @@ object DruidBeams
       )
     }
 
-    def taskContext(taskContext: Map[String, Any]) = {
+    def taskContext(taskContext: Dict) = {
       new Builder[InputType, EventType](config.copy(_taskContext = Some(taskContext)))
     }
 
