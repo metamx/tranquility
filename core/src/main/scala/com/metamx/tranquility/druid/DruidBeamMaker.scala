@@ -49,7 +49,7 @@ class DruidBeamMaker[A](
   emitter: ServiceEmitter,
   objectWriter: ObjectWriter[A],
   druidObjectMapper: ObjectMapper,
-  taskContext: Map[String, Any] = Map.empty
+  taskContext: Dict = Dict()
 ) extends BeamMaker[A, DruidBeam[A]] with Logging
 {
   private[tranquility] def taskBytes(
@@ -58,7 +58,7 @@ class DruidBeamMaker[A](
     firehoseId: String,
     partition: Int,
     replicant: Int,
-    taskContext: Map[String, Any] = Map.empty
+    taskContext: Dict = Dict()
   ): Array[Byte] =
   {
     val dataSource = location.dataSource
@@ -134,7 +134,7 @@ class DruidBeamMaker[A](
     }
     val taskContextMap = taskContext match {
       case taskContext if taskContext.nonEmpty => Map("context" -> taskContext)
-      case other => Map.empty
+      case _ => Map.empty
     }
     val taskMap = Map(
       "type" -> "index_realtime",

@@ -720,7 +720,7 @@ object DruidBeams
     _alertMap: Option[Dict] = None,
     _objectWriter: Option[ObjectWriter[EventType]] = None,
     _timestamper: Option[Timestamper[EventType]] = None,
-    _taskContext: Option[Map[String, Any]] = None
+    _taskContext: Option[Dict] = None
   )
   {
     def buildAll() = new {
