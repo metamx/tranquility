@@ -49,7 +49,7 @@ class DruidBeamMaker[A](
   emitter: ServiceEmitter,
   objectWriter: ObjectWriter[A],
   druidObjectMapper: ObjectMapper,
-  taskContext: Map[String, Any] = Map()
+  taskContext: Map[String, Any] = Map.empty
 ) extends BeamMaker[A, DruidBeam[A]] with Logging
 {
   private[tranquility] def taskBytes(
@@ -58,7 +58,7 @@ class DruidBeamMaker[A](
     firehoseId: String,
     partition: Int,
     replicant: Int,
-    taskContext: Map[String, Any] = Map()
+    taskContext: Map[String, Any] = Map.empty
   ): Array[Byte] =
   {
     val dataSource = location.dataSource
@@ -132,6 +132,10 @@ class DruidBeamMaker[A](
         log.warn(s"DruidTuning key[$k] for task[$taskId] overridden from[$v] to[${druidTuningMapWithOverrides(k)}].")
       }
     }
+    val taskContextMap = taskContext match {
+      case taskContext if taskContext.nonEmpty => Map("context" -> taskContext)
+      case other => Map.empty
+    }
     val taskMap = Map(
       "type" -> "index_realtime",
       "id" -> taskId,
@@ -144,7 +148,7 @@ class DruidBeamMaker[A](
         "ioConfig" -> ioConfigMap,
         "tuningConfig" -> druidTuningMapWithOverrides
       )
-    ) ++ Option(taskContext).map { case m if m.nonEmpty => Map("context" -> m)}.getOrElse(Dict())
+    ) ++ taskContextMap
     druidObjectMapper.writeValueAsBytes(normalizeJava(taskMap))
   }
 

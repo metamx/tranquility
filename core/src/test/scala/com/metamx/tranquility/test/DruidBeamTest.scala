@@ -104,7 +104,8 @@ class DruidBeamTest extends FunSuite with Matchers
         }
       ),
       null,
-      DruidGuicer.Default.objectMapper
+      DruidGuicer.Default.objectMapper,
+      Map("label" -> "mylabel")
     )
     val interval = new Interval("2000/PT1H", ISOChronology.getInstanceUTC)
     val taskBytes = druidBeamMaker.taskBytes(
@@ -112,7 +113,8 @@ class DruidBeamTest extends FunSuite with Matchers
       "mygroup",
       "myfirehose",
       1,
-      2
+      2,
+      Map("label" -> "mylabel")
     )
     val objectReader = DruidGuicer.Default.objectMapper.reader(
       new InjectableValues
@@ -162,5 +164,8 @@ class DruidBeamTest extends FunSuite with Matchers
     parseSpec.getTimestampSpec.getTimestampFormat should be("iso")
     parseSpec.getDimensionsSpec.getDimensions.asScala should be(Seq("dim1", "dim2"))
     parseSpec.getDimensionsSpec.getSpatialDimensions.asScala.map(_.getDimName) should be(Seq("spatial1"))
+
+    val context = task.getContext
+    context.get("label") should be("mylabel")
   }
 }
