@@ -133,7 +133,7 @@ class DruidBeamMaker[A](
       }
     }
     val taskContextMap = taskContext match {
-      case taskContext if taskContext.nonEmpty => Map("context" -> taskContext)
+      case tc if tc.nonEmpty => Map("context" -> tc)
       case _ => Map.empty
     }
     val taskMap = Map(
