@@ -160,7 +160,7 @@ val kafkaTestDependencies = Seq(
 )
 
 lazy val commonSettings = Seq(
-  organization := "io.druid",
+  organization := "metamx",
 
   javaOptions := Seq("-Xms512m", "-Xmx512m", "-XX:MaxPermSize=256M"),
 
@@ -177,7 +177,7 @@ lazy val commonSettings = Seq(
 
   publishMavenStyle := true,
 
-  publishTo := Some("central-local" at "https://metamx.artifactoryonline.com/metamx/libs-releases-local"),
+  publishTo := Some("libs-local" at "https://metamx.artifactoryonline.com/metamx/libs-releases-local"),
 
   pomIncludeRepository := { _ => false },
 
@@ -188,9 +188,7 @@ lazy val commonSettings = Seq(
     </scm>),
 
   fork in Test := true
-) ++ releaseSettings ++ net.virtualvoid.sbt.graph.Plugin.graphSettings ++ Seq(
-  ReleaseKeys.publishArtifactsAction := PgpKeys.publishSigned.value
-)
+) ++ releaseSettings ++ net.virtualvoid.sbt.graph.Plugin.graphSettings
 
 lazy val root = project.in(file("."))
   .settings(commonSettings: _*)
