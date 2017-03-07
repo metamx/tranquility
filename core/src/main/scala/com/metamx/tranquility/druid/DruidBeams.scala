@@ -589,6 +589,11 @@ object DruidBeams
       )
     }
 
+    /**
+      * Provide a taskContext that will be added to all created tasks. Optional, by default context is empty.
+      * @param taskContext
+      * @return new builder
+      */
     def taskContext(taskContext: Dict) = {
       new Builder[InputType, EventType](config.copy(_taskContext = Some(taskContext)))
     }
