@@ -15,8 +15,8 @@ val jacksonTwoModuleScalaVersion = "2.4.5"
 val druidVersion = "0.9.1"
 val guiceVersion = "4.0"
 val flinkVersion = "1.0.3"
-val finagleVersion = "6.31.0"
-val twitterUtilVersion = "6.30.0"
+val finagleVersion = "6.43.0"
+val twitterUtilVersion = "6.42.0"
 val samzaVersion = "0.12.0"
 val sparkVersion = "1.6.0"
 val scalatraVersion = "2.3.1"
@@ -38,14 +38,14 @@ def dependOnDruid(artifact: String) = {
 }
 
 val coreDependencies = Seq(
-  "com.metamx" %% "scala-util" % "1.11.6" exclude("log4j", "log4j") force(),
-  "com.metamx" % "java-util" % "0.27.4" exclude("log4j", "log4j") force(),
+  "com.metamx" %% "scala-util" % "1.13.2" exclude("log4j", "log4j") force(),
+  "com.metamx" % "java-util" % "0.28.2" exclude("log4j", "log4j") force(),
   "io.netty" % "netty" % "3.10.5.Final" force(),
   "com.twitter" %% "util-core" % twitterUtilVersion force(),
   "com.twitter" %% "finagle-core" % finagleVersion force(),
   "com.twitter" %% "finagle-http" % finagleVersion force(),
-  "org.slf4j" % "slf4j-api" % "1.7.12" force() force(),
-  "org.slf4j" % "jul-to-slf4j" % "1.7.12" force() force(),
+  "org.slf4j" % "slf4j-api" % "1.7.25" force() force(),
+  "org.slf4j" % "jul-to-slf4j" % "1.7.25" force() force(),
   "org.apache.httpcomponents" % "httpclient" % apacheHttpVersion force(),
   "org.apache.httpcomponents" % "httpcore" % apacheHttpVersion force(),
 
@@ -188,8 +188,8 @@ lazy val commonSettings = Seq(
     </scm>),
 
   fork in Test := true
-) ++ releaseSettings ++ net.virtualvoid.sbt.graph.Plugin.graphSettings ++ Seq(
-  ReleaseKeys.publishArtifactsAction := PgpKeys.publishSigned.value
+) ++ Seq(
+  releasePublishArtifactsAction := PgpKeys.publishSigned.value
 )
 
 lazy val root = project.in(file("."))

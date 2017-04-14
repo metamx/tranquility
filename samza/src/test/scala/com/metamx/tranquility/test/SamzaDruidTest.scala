@@ -18,6 +18,7 @@
  */
 package com.metamx.tranquility.test
 
+import com.github.nscala_time.time.Imports._
 import com.metamx.common.scala.Logging
 import com.metamx.common.scala.Predef._
 import com.metamx.common.scala.timekeeper.TestingTimekeeper
@@ -48,7 +49,6 @@ import org.apache.samza.task.TaskCoordinator
 import org.apache.samza.util.BlockingEnvelopeMap
 import org.apache.samza.util.SinglePartitionWithoutOffsetsSystemAdmin
 import org.junit.runner.RunWith
-import org.scala_tools.time.Imports._
 import org.scalatest.FunSuite
 import org.scalatest.junit.JUnitRunner
 import scala.collection.JavaConverters._
