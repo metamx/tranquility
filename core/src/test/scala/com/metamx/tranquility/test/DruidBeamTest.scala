@@ -19,10 +19,22 @@
 
 package com.metamx.tranquility.test
 
+import _root_.io.druid.data.input.impl.TimestampSpec
+import _root_.io.druid.granularity.QueryGranularities
+import _root_.io.druid.indexing.common.task.RealtimeIndexTask
+import _root_.io.druid.indexing.common.task.Task
+import _root_.io.druid.query.aggregation.LongSumAggregatorFactory
+import _root_.io.druid.segment.realtime.firehose.ChatHandlerProvider
+import _root_.io.druid.segment.realtime.firehose.ClippedFirehoseFactory
+import _root_.io.druid.segment.realtime.firehose.NoopChatHandlerProvider
+import _root_.io.druid.server.metrics.EventReceiverFirehoseRegister
+import _root_.io.druid.timeline.partition.LinearShardSpec
+import _root_.scala.collection.JavaConverters._
 import com.fasterxml.jackson.databind
 import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.InjectableValues
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.github.nscala_time.time.Imports._
 import com.google.inject.Key
 import com.metamx.common.Granularity
 import com.metamx.common.scala.untyped.Dict
@@ -38,21 +50,9 @@ import com.metamx.tranquility.druid.DruidRollup
 import com.metamx.tranquility.druid.DruidSpatialDimension
 import com.metamx.tranquility.druid.DruidTuning
 import com.metamx.tranquility.druid.SpecificDruidDimensions
-import _root_.io.druid.data.input.impl.TimestampSpec
-import _root_.io.druid.granularity.QueryGranularities
-import _root_.io.druid.indexing.common.task.RealtimeIndexTask
-import _root_.io.druid.indexing.common.task.Task
-import _root_.io.druid.query.aggregation.LongSumAggregatorFactory
-import _root_.io.druid.segment.realtime.firehose.ChatHandlerProvider
-import _root_.io.druid.segment.realtime.firehose.ClippedFirehoseFactory
-import _root_.io.druid.segment.realtime.firehose.NoopChatHandlerProvider
-import _root_.io.druid.server.metrics.EventReceiverFirehoseRegister
-import _root_.io.druid.timeline.partition.LinearShardSpec
 import org.joda.time.chrono.ISOChronology
-import org.scala_tools.time.Imports._
 import org.scalatest.FunSuite
 import org.scalatest.Matchers
-import _root_.scala.collection.JavaConverters._
 
 class DruidBeamTest extends FunSuite with Matchers
 {

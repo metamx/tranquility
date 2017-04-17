@@ -1,6 +1,4 @@
-scalaVersion := "2.10.5"
-
-crossScalaVersions := Seq("2.10.5", "2.11.7")
+scalaVersion in ThisBuild := "2.11.8"
 
 // Disable parallel execution, the various Druid oriented tests need to claim ports
 parallelExecution in ThisBuild := false
@@ -19,12 +17,12 @@ val guiceVersion = "4.0"
 val flinkVersion = "1.0.3"
 val finagleVersion = "6.31.0"
 val twitterUtilVersion = "6.30.0"
-val samzaVersion = "0.8.0"
+val samzaVersion = "0.12.0"
 val sparkVersion = "1.6.0"
 val scalatraVersion = "2.3.1"
 val jettyVersion = "9.2.5.v20141112"
 val apacheHttpVersion = "4.3.3"
-val kafkaVersion = "0.8.2.2"
+val kafkaVersion = "0.10.1.1"
 val airlineVersion = "0.7"
 
 def dependOnDruid(artifact: String) = {
@@ -79,7 +77,7 @@ val loggingDependencies = Seq(
   "org.slf4j" % "jul-to-slf4j" % "1.7.12"
 )
 
-def flinkDependencies(scalaVersion: String) = {
+val flinkDependencies = {
   Seq(
     "org.apache.flink" %% "flink-streaming-scala" % flinkVersion % "optional"
     exclude("log4j", "log4j")
@@ -137,7 +135,7 @@ val coreTestDependencies = Seq(
   "org.slf4j" % "jul-to-slf4j" % "1.7.12" % "test"
 ) ++ loggingDependencies.map(_ % "test")
 
-def flinkTestDependencies(scalaVersion: String) = {
+val flinkTestDependencies = {
   Seq("org.apache.flink" % "flink-core" % flinkVersion % "test" classifier "tests",
     "org.apache.flink" %% "flink-runtime" % flinkVersion % "test" classifier "tests",
     "org.apache.flink" %% "flink-test-utils" % flinkVersion % "test"
@@ -145,11 +143,13 @@ def flinkTestDependencies(scalaVersion: String) = {
     loggingDependencies.map(_ % "test")
 }
 
-// Force 2.10 here, makes update resolution happy, but since w'ere not building for 2.11
-// we won't end up in runtime version hell by doing this.
-val samzaTestDependencies = Seq(
-  "org.apache.samza" % "samza-core_2.10" % samzaVersion % "test"
-)
+val samzaTestDependencies = {
+  Seq(
+    "org.apache.samza" %% "samza-core" % samzaVersion % "test",
+    "org.apache.samza" %% "samza-kafka" % samzaVersion % "test"
+  ).map(_ exclude("log4j", "log4j") exclude("org.slf4j", "slf4j-log4j12") force()) ++
+    loggingDependencies.map(_ % "test")
+}
 
 val serverTestDependencies = Seq(
   "org.scalatra" %% "scalatra-test" % scalatraVersion % "test"
@@ -206,8 +206,7 @@ lazy val core = project.in(file("core"))
 lazy val flink = project.in(file("flink"))
   .settings(commonSettings: _*)
   .settings(name := "tranquility-flink")
-  .settings(libraryDependencies <++= scalaVersion(flinkDependencies))
-  .settings(libraryDependencies <++= scalaVersion(flinkTestDependencies))
+  .settings(libraryDependencies ++= (flinkDependencies ++ flinkTestDependencies))
   .dependsOn(core % "test->test;compile->compile")
 
 lazy val spark = project.in(file("spark"))
@@ -227,10 +226,6 @@ lazy val samza = project.in(file("samza"))
   .settings(commonSettings: _*)
   .settings(name := "tranquility-samza")
   .settings(libraryDependencies ++= (samzaDependencies ++ samzaTestDependencies))
-  // don't compile or publish for Scala > 2.10
-  .settings((skip in compile) := scalaVersion { sv => !sv.startsWith("2.10.") }.value)
-  .settings((skip in test) := scalaVersion { sv => !sv.startsWith("2.10.") }.value)
-  .settings(publishArtifact <<= scalaVersion { sv => sv.startsWith("2.10.") })
   .settings(publishArtifact in Test := false)
   .dependsOn(core % "test->test;compile->compile")
 
