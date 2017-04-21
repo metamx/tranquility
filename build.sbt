@@ -1,6 +1,6 @@
 scalaVersion := "2.10.5"
 
-crossScalaVersions := Seq("2.10.6", "2.11.8")
+crossScalaVersions := Seq("2.10.5", "2.11.7")
 
 // Disable parallel execution, the various Druid oriented tests need to claim ports
 parallelExecution in ThisBuild := false
@@ -19,7 +19,7 @@ val guiceVersion = "4.0"
 val flinkVersion = "1.0.0"
 val finagleVersion = "6.31.0"
 val twitterUtilVersion = "6.30.0"
-val samzaVersion = "0.12.0-mmx1"
+val samzaVersion = "0.8.0"
 val sparkVersion = "1.6.0"
 val scalatraVersion = "2.3.1"
 val jettyVersion = "9.2.5.v20141112"
@@ -98,7 +98,7 @@ val stormDependencies = Seq(
 )
 
 val samzaDependencies = Seq(
-  "org.apache.samza" % "samza-api" % samzaVersion % "optional" exclude("org.slf4j", "slf4j-log4j12")
+  "org.apache.samza" % "samza-api" % samzaVersion % "optional"
 )
 
 val sparkDependencies = Seq(
@@ -145,13 +145,11 @@ def flinkTestDependencies(scalaVersion: String) = {
     loggingDependencies.map(_ % "test")
 }
 
-val samzaTestDependencies = {
-  Seq(
-    "org.apache.samza" %% "samza-core" % samzaVersion % "test",
-    "org.apache.samza" %% "samza-kafka" % samzaVersion % "test"
-  ).map(_ exclude("log4j", "log4j") exclude("org.slf4j", "slf4j-log4j12") force()) ++
-    loggingDependencies.map(_ % "test")
-}
+// Force 2.10 here, makes update resolution happy, but since w'ere not building for 2.11
+// we won't end up in runtime version hell by doing this.
+val samzaTestDependencies = Seq(
+  "org.apache.samza" % "samza-core_2.10" % samzaVersion % "test"
+)
 
 val serverTestDependencies = Seq(
   "org.scalatra" %% "scalatra-test" % scalatraVersion % "test"
@@ -166,9 +164,9 @@ lazy val commonSettings = Seq(
 
   javaOptions := Seq("-Xms512m", "-Xmx512m", "-XX:MaxPermSize=256M"),
 
-  // Target Java 8
-  scalacOptions += "-target:jvm-1.8",
-  javacOptions in compile ++= Seq("-source", "1.8", "-target", "1.8"),
+  // Target Java 7
+  scalacOptions += "-target:jvm-1.7",
+  javacOptions in compile ++= Seq("-source", "1.7", "-target", "1.7"),
 
   // resolve-term-conflict:object since storm-core has a package and object with the same name
   scalacOptions := Seq("-feature", "-deprecation", "-Yresolve-term-conflict:object"),
@@ -226,8 +224,11 @@ lazy val storm = project.in(file("storm"))
 lazy val samza = project.in(file("samza"))
   .settings(commonSettings: _*)
   .settings(name := "tranquility-samza")
-  .settings(resolvers += "central-local" at "https://metamx.artifactoryonline.com/metamx/libs-releases-local")
   .settings(libraryDependencies ++= (samzaDependencies ++ samzaTestDependencies))
+  // don't compile or publish for Scala > 2.10
+  .settings((skip in compile) := scalaVersion { sv => !sv.startsWith("2.10.") }.value)
+  .settings((skip in test) := scalaVersion { sv => !sv.startsWith("2.10.") }.value)
+  .settings(publishArtifact <<= scalaVersion { sv => sv.startsWith("2.10.") })
   .settings(publishArtifact in Test := false)
   .dependsOn(core % "test->test;compile->compile")
 
