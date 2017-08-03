@@ -307,6 +307,11 @@ class Tranquilizer[MessageType] private(
         myBuffer.map(_ => Future.exception(new IllegalStateException("sendAll failed", e)))
     }
 
+    assert(myBuffer.nonEmpty)
+    // Check that all beams in the chain respect the contract.
+    // We can't be sure that they are still in the same order but at least we can check that a result exists for all messages sent
+    assert(myBuffer.size == futureResults.size)
+
     val remaining = new AtomicInteger(futureResults.size)
     val sent = new AtomicInteger()
     val dropped = new AtomicInteger()
