@@ -142,7 +142,8 @@ class DruidBeamTest extends FunSuite with Matchers
       ),
       null,
       DruidGuicer.Default.objectMapper,
-      Map("label" -> "mylabel")
+      Map("label" -> "mylabel"),
+      "concise"
     )
     val interval = new Interval("2000/PT1H", ISOChronology.getInstanceUTC)
     val taskBytes = druidBeamMaker.taskBytes(

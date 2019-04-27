@@ -31,6 +31,9 @@ import com.metamx.tranquility.typeclass.ObjectWriter
 import com.twitter.util.Await
 import com.twitter.util.Future
 import io.druid.data.input.impl.TimestampSpec
+import io.druid.segment.IndexSpec
+import io.druid.segment.data.ConciseBitmapSerdeFactory
+import io.druid.segment.data.RoaringBitmapSerdeFactory
 import java.{util => ju}
 import org.joda.time.chrono.ISOChronology
 import org.joda.time.DateTime
@@ -49,7 +52,8 @@ class DruidBeamMaker[A](
   emitter: ServiceEmitter,
   objectWriter: ObjectWriter[A],
   druidObjectMapper: ObjectMapper,
-  taskContext: Dict
+  taskContext: Dict,
+  bitmapType: String
 ) extends BeamMaker[A, DruidBeam[A]] with Logging
 {
   private[tranquility] def taskBytes(
@@ -124,7 +128,15 @@ class DruidBeamMaker[A](
         Map("type" -> "serverTime")
       } else {
         Map("type" -> "none")
-      })
+      }),
+      "indexSpec" -> new IndexSpec(
+        bitmapType match {
+          case "concise" => new ConciseBitmapSerdeFactory
+          case "roaring" => new RoaringBitmapSerdeFactory
+        },
+        null,
+        null
+      )
     )
     // Warn if anything from the tuningMap is getting overridden.
     for ((k, v) <- druidTuningMap) {
