@@ -957,7 +957,7 @@ object DruidBeams
         }
       }
       val taskContext             = _taskContext getOrElse Map.empty
-      val bitmapType              = _bitmapType getOrElse("concise")
+      val bitmapType              = _bitmapType getOrElse "concise"
     }
   }
 }
