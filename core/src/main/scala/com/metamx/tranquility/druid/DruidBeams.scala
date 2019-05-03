@@ -478,7 +478,7 @@ object DruidBeams
 
     /**
       * Provide tunings for coordination of Druid task creation. Optional, see
-      * [[com.metamx.tranquility.beam.ClusteredBeamTuning$]] for defaults.
+      * [[com.metamx.tranquility.beam.ClusteredBeamTuning]] for defaults.
       *
       * These influence how and when Druid tasks are created.
       *
@@ -730,6 +730,8 @@ object DruidBeams
       )
     }
 
+    def bitmapType(bitmapType: String) = new Builder[InputType, EventType](config.copy(_bitmapType = Some(bitmapType)))
+
     /**
       * Build a Beam using this DruidBeams builder.
       *
@@ -754,7 +756,8 @@ object DruidBeams
         things.emitter,
         things.objectWriter,
         things.druidObjectMapper,
-        things.taskContext
+        things.taskContext,
+        things.bitmapType
       )
       val clusteredBeam = new ClusteredBeam(
         things.clusteredBeamZkBasePath,
@@ -857,7 +860,8 @@ object DruidBeams
     _alertMap: Option[Dict] = None,
     _objectWriter: Option[ObjectWriter[EventType]] = None,
     _timestamper: Option[Timestamper[EventType]] = None,
-    _taskContext: Option[Dict] = None
+    _taskContext: Option[Dict] = None,
+    _bitmapType: Option[String] = Some("concise")
   )
   {
     def buildAll() = new {
@@ -953,7 +957,7 @@ object DruidBeams
         }
       }
       val taskContext             = _taskContext getOrElse Map.empty
+      val bitmapType              = _bitmapType getOrElse "concise"
     }
   }
-
 }
